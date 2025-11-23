@@ -2,6 +2,12 @@
 
 Proyek ini merupakan implementasi Grafis Komputer untuk memvisualisasikan inisial nama dan digit terakhir NRP menjadi objek 3D interaktif berbasis WebGL.
 
+## 📸 Preview Hasil
+
+![Tampilan Hasil Render](preview.png)
+
+---
+
 ## 👤 Identitas Mahasiswa
 
 | Atribut | Detail |
@@ -57,3 +63,4 @@ Hasil render ditampilkan dalam halaman web tunggal (`HTML`) dengan fitur:
 ---
 
 *Dibuat untuk memenuhi tugas Grafis Komputer.*
+        
