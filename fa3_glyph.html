@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Glyph: Farhan (5025231053)</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        
+        .ui-container {
+            position: absolute;
+            width: 100%;
+            pointer-events: none;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+        }
+
+        #header {
+            top: 30px;
+        }
+        #header h1 {
+            margin: 0;
+            font-size: 16px; 
+            letter-spacing: 3px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        #header p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #footer {
+            bottom: 30px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px 0;
+            width: 100%;
+        }
+        
+        .separator {
+            margin: 0 15px;
+            opacity: 0.3;
+        }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="header" class="ui-container">
+        <h1>Farhan</h1>
+        <p>5025231053</p>
+    </div>
+
+    <div id="footer" class="ui-container">
+        KLIK KIRI: PUTAR <span class="separator">|</span> KLIK KANAN: GESER <span class="separator">|</span> SCROLL: ZOOM
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // SETUP SCENE
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x15151a); 
+        scene.fog = new THREE.FogExp2(0x15151a, 0.035);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1, 14);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // PENCAHAYAAN
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(5, 8, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+
+        const rimLight = new THREE.SpotLight(0x0088ff, 3);
+        rimLight.position.set(-10, 5, -5);
+        rimLight.lookAt(0, 0, 0);
+        scene.add(rimLight);
+
+        // MATERIAL
+        const matF = new THREE.MeshStandardMaterial({ 
+            color: 0x00aaff, roughness: 0.2, metalness: 0.5 
+        });
+        const matA = new THREE.MeshStandardMaterial({ 
+            color: 0xff0055, roughness: 0.2, metalness: 0.3 
+        });
+        const mat3 = new THREE.MeshStandardMaterial({ 
+            color: 0xffaa00, roughness: 0.1, metalness: 0.7,
+            emissive: 0x442200, emissiveIntensity: 0.4
+        });
+
+        // GEOMETRI HURUF F
+        function createF() {
+            const group = new THREE.Group();
+            
+            const vGeo = new THREE.BoxGeometry(0.8, 4.0, 0.8);
+            const vMesh = new THREE.Mesh(vGeo, matF);
+            vMesh.castShadow = true;
+            group.add(vMesh);
+
+            const tGeo = new THREE.BoxGeometry(2, 0.8, 0.8);
+            const tMesh = new THREE.Mesh(tGeo, matF);
+            tMesh.position.set(1, 1.6, 0);
+            tMesh.castShadow = true;
+            group.add(tMesh);
+
+            const mGeo = new THREE.BoxGeometry(1.5, 0.8, 0.8);
+            const mMesh = new THREE.Mesh(mGeo, matF);
+            mMesh.position.set(0.75, 0.2, 0);
+            mMesh.castShadow = true;
+            group.add(mMesh);
+
+            return group;
+        }
+
+        // GEOMETRI HURUF A
+        function createA() {
+            const group = new THREE.Group();
+
+            const loopGeo = new THREE.TorusGeometry(1, 0.4, 32, 64); 
+            const loop = new THREE.Mesh(loopGeo, matA);
+            loop.castShadow = true;
+            group.add(loop);
+
+            const stemGeo = new THREE.CylinderGeometry(0.4, 0.4, 2.8, 32);
+            const stem = new THREE.Mesh(stemGeo, matA);
+            stem.position.set(1, 0, 0);
+            stem.castShadow = true;
+            group.add(stem);
+
+            return group;
+        }
+
+        // GEOMETRI ANGKA 3
+        function create3() {
+            const path = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-0.8, 1.8, 0),
+                new THREE.Vector3( 0.4, 1.8, 0),
+                new THREE.Vector3( 0.6, 1.2, 0),
+                new THREE.Vector3(-0.2, 0.05, 0),
+                new THREE.Vector3( 0.7, -0.6, 0),
+                new THREE.Vector3( 0.5, -1.8, 0),
+                new THREE.Vector3(-0.9, -1.8, 0),
+            ]);
+
+            const tubeGeo = new THREE.TubeGeometry(path, 64, 0.35, 16, false);
+            const mesh3 = new THREE.Mesh(tubeGeo, mat3);
+            mesh3.castShadow = true;
+
+            const capGeo = new THREE.SphereGeometry(0.35, 16, 16);
+            const startCap = new THREE.Mesh(capGeo, mat3);
+            startCap.position.copy(path.getPoint(0));
+            const endCap = new THREE.Mesh(capGeo, mat3);
+            endCap.position.copy(path.getPoint(1));
+
+            const group = new THREE.Group();
+            group.add(mesh3);
+            group.add(startCap);
+            group.add(endCap);
+
+            return group;
+        }
+
+        // KOMPOSISI OBJEK
+        const glyphGroup = new THREE.Group();
+        scene.add(glyphGroup);
+
+        const f = createF();
+        f.position.set(-3.5, 0, 0);
+        glyphGroup.add(f);
+
+        const a = createA();
+        a.position.set(-0.5, -0.6, 0);
+        glyphGroup.add(a);
+
+        const three = create3();
+        three.position.set(3, 0, 0);
+        three.scale.set(1.1, 1.1, 1.1);
+        three.rotation.y = -0.15;
+        glyphGroup.add(three);
+
+        const planeGeo = new THREE.PlaneGeometry(30, 30);
+        const planeMat = new THREE.MeshStandardMaterial({ 
+            color: 0x222222, roughness: 0.1, metalness: 0.5
+        });
+        const plane = new THREE.Mesh(planeGeo, planeMat);
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = -2.5;
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        // ANIMASI DAN KONTROL
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            f.position.y = Math.sin(t) * 0.1;
+            a.position.y = -0.6 + Math.sin(t + 0.5) * 0.1;
+            three.position.y = Math.sin(t + 1.0) * 0.1;
+
+            glyphGroup.rotation.y = Math.sin(t * 0.5) * 0.05;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+
+    </script>
+</body>
+</html>
