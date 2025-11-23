@@ -2,13 +2,13 @@
 
 Proyek ini merupakan implementasi Grafis Komputer untuk memvisualisasikan inisial nama dan digit terakhir NRP menjadi objek 3D interaktif berbasis WebGL.
 
-## 📸 Preview Hasil
+## Preview Hasil
 
 ![Tampilan Hasil Render](preview.png)
 
 ---
 
-## 👤 Identitas Mahasiswa
+## Identitas Mahasiswa
 
 | Atribut | Detail |
 | :--- | :--- |
@@ -18,7 +18,7 @@ Proyek ini merupakan implementasi Grafis Komputer untuk memvisualisasikan inisia
 
 ---
 
-## 📝 Laporan Studi Kasus
+## Laporan Studi Kasus
 
 Berikut adalah penjabaran teknis sesuai poin-poin studi kasus:
 
@@ -51,16 +51,12 @@ Hasil render ditampilkan dalam halaman web tunggal (`HTML`) dengan fitur:
 
 ---
 
-## 🚀 Cara Menjalankan (How to Run)
+## Cara Menjalankan (How to Run)
 
 1. Pastikan Anda memiliki koneksi internet (untuk memuat library Three.js).
 2. Buka file `fa3_glyph_clean.html` menggunakan browser modern:
    - Google Chrome
    - Mozilla Firefox
    - Microsoft Edge
-3. Gunakan Mouse untuk berinteraksi dengan objek 3D.
-
----
-
-*Dibuat untuk memenuhi tugas Grafis Komputer.*
+3. Gunakan Mouse atau Touchpad untuk berinteraksi dengan objek 3D.
         
